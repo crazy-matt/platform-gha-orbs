@@ -56,8 +56,6 @@ jobs:
           task --taskfile ${TASKFILE_SECURITY} all -- sarif
         env:
           GRYPE_DB_CACHE_DIR: ${{ runner.temp }}/.cache/grype
-        env:
-          GRYPE_DB_CACHE_DIR: ${{ runner.temp }}/.cache/grype
       - name: 'Upload SARIF reports'
         if: always()
         continue-on-error: true
