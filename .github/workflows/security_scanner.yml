@@ -28,8 +28,7 @@ jobs:
       - run: |
           cd ${{ github.workspace }}
           ls -lna
-          ls -lna .github/workflows
-          ls -lna /home/runner/work
+          cat .github/workflows/security_scanner.yml
           exit 1
       - name: 'Cache Grype Database'
         uses: actions/cache@v2
