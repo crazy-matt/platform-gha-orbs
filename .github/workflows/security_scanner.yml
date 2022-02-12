@@ -13,6 +13,7 @@ on:
 defaults:
   run:
     shell: bash
+    working-directory: ./reusable
 
 jobs:
   vulnerability:
@@ -21,16 +22,13 @@ jobs:
     steps:
       - name: 'Checkout'
         uses: actions/checkout@v2
+        with:
+          path: ../
       - name: 'Checkout platform-gha-orbs'
         uses: actions/checkout@v2
         with:
           repository: crazy-matt/reusable
-          path: platform-gha-orbs
-      - name: 'Bring centralised config'
-        run: |
-          cp platform-gha-orbs/* ./
-          ls -lna
-          ls -lna ${{ github.workspace }}
+          #path: platform-gha-orbs
       - name: 'Cache Grype Database'
         uses: actions/cache@v2
         with:
@@ -40,7 +38,7 @@ jobs:
       - name: 'Set Job Vars'
         id: vars
         run: |
-          echo "::set-output name=task_version::$(cat .tool-versions | grep -w task | cut -d ' ' -f2)"
+          echo "::set-output name=task_version::$(cat platform-gha-orbs/.tool-versions | grep -w task | cut -d ' ' -f2)"
       - name: 'Install asdf dependencies'
         uses: asdf-vm/actions/setup@v1
       - name: 'Install Task'
