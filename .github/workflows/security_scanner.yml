@@ -31,9 +31,6 @@ jobs:
         with:
           repository: crazy-matt/platform-gha-orbs
           path: platform-gha-orbs
-      - run: |
-          ls -lna
-          ls -lna ${{ github.workspace }}
       - name: 'Cache Grype Database'
         uses: actions/cache@v2
         with:

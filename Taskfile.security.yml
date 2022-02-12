@@ -5,6 +5,9 @@ version: '3'
 vars:
   REPO_ABS_ROOT_PATH:
     sh: git rev-parse --show-toplevel
+  GIT_REPO:
+    sh: git config --get remote.origin.url | sed -e 's#^.*:##' -e 's#.git$##' -e 's#//github.com/*##'
+  RELATIVE_PATH_TO_CONFIGS: '${{.REPO_ABS_ROOT_PATH}}/{{.GIT_REPO}}'
 
 silent: true
 
@@ -25,6 +28,8 @@ tasks:
     cmds:
     - echo -e "\n📒 {{.TASK}}"
     - echo "Absolute path":" {{.REPO_ABS_ROOT_PATH}}"
+    - echo "Absolute path":" {{.GIT_REPO}}"
+    - echo "Absolute path":" {{.RELATIVE_PATH_TO_CONFIGS}}"
 
   security:
     desc: Run all security scanners
@@ -38,6 +43,7 @@ tasks:
   security:filesystem:grype:
     desc: Run Grype (Filesystem Vulnerability Scanner)
     cmds:
+    - task: debug:resolve_vars
     - echo -e "\n📒 {{.TASK}}"
     - plugin_name="grype"; asdf plugin add "${plugin_name}" || true; asdf install "${plugin_name}" $(asdf current "${plugin_name}" | tr -s ' ' | cut -d' ' -f2)
     - grype "dir:." --output table --config .security/grype.yaml
