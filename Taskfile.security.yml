@@ -5,18 +5,16 @@ version: '3'
 vars:
   REPO_ABS_ROOT_PATH:
     sh: git rev-parse --show-toplevel
+  ORBS_CALLER_ROOT_PATH:
+    sh: realpath "{{.REPO_ABS_ROOT_PATH}}/.."
   GIT_REPO:
     sh: git config --get remote.origin.url | sed -e 's#^.*:##' -e 's#.git$##' -e 's#//github.com/*##'
-  RELATIVE_PATH_TO_CONFIGS: '${{.REPO_ABS_ROOT_PATH}}/{{.GIT_REPO}}'
+  REPO_NAME:
+    sh: echo {{.GIT_REPO}} | sed -e 's#^.*/##'
 
 silent: true
 
 tasks:
-  default:
-    cmds:
-    - echo -e "\n📒 {{.TASK}}"
-    - task --list
-
   debug:
     desc: Run all debug tasks
     cmds:
@@ -27,37 +25,37 @@ tasks:
     desc: Output few things which can help debugging
     cmds:
     - echo -e "\n📒 {{.TASK}}"
-    - echo "Absolute path":" {{.REPO_ABS_ROOT_PATH}}"
-    - echo "Absolute path":" {{.GIT_REPO}}"
-    - echo "Absolute path":" {{.RELATIVE_PATH_TO_CONFIGS}}"
+    - echo "Absolute root path":" {{.REPO_ABS_ROOT_PATH}}"
+    - echo "Orbs caller root path":" {{.ORBS_CALLER_ROOT_PATH}}"
+    - echo "Git repo":" {{.GIT_REPO}}"
+    - echo "Repo name":" {{.REPO_NAME}}"
 
-  security:
+  all:
     desc: Run all security scanners
     run: once
     cmds:
     - echo -e "\n📒 {{.TASK}}"
     - if [[ "{{.CLI_ARGS}}" == *"sarif"* ]]; then mkdir -p sarif-reports; fi
-    - task: security:filesystem:grype
-    - task: security:secret:gitleaks  # scan:ignore
+    - task: filesystem:grype
+    - task: secret:gitleaks  # scan:ignore
 
-  security:filesystem:grype:
+  filesystem:grype:
     desc: Run Grype (Filesystem Vulnerability Scanner)
     cmds:
     - task: debug:resolve_vars
     - echo -e "\n📒 {{.TASK}}"
     - plugin_name="grype"; asdf plugin add "${plugin_name}" || true; asdf install "${plugin_name}" $(asdf current "${plugin_name}" | tr -s ' ' | cut -d' ' -f2)
-    - grype "dir:." --output table --config .security/grype.yaml
+    - grype "dir:." --output table --config {{.REPO_ABS_ROOT_PATH}}/.security/grype.yaml
 
   # Remove the --no-git flag if you want gitleaks to make a deep scan on the entire history of the repo
-  security:secret:gitleaks:
+  secret:gitleaks:
     desc: Run Gitleaks
     cmds:
     - echo -e "\n📒 {{.TASK}}"
     - |
       [[ "${GITHUB_ACTIONS}" == 'true' ]] && redact="--redact"
-      echo "Gitleaks will scan the content of: {{.REPO_ABS_ROOT_PATH}}"
       if [[ "{{.CLI_ARGS}}" == *"sarif"* ]]; then
-        docker run --rm --volume "{{.REPO_ABS_ROOT_PATH}}:/work" zricethezav/gitleaks:latest detect --no-git --exit-code 1 -v ${redact} --report-format "sarif" --report-path "sarif-reports/gitleaks-report.sarif" --source="/work" --config /work/.security/credscan-config.toml
+        docker run --rm --volume "{{.ORBS_CALLER_ROOT_PATH}}:/work" zricethezav/gitleaks:latest detect --no-git --exit-code 1 -v ${redact} --report-format "sarif" --report-path "sarif-reports/gitleaks-report.sarif" --source="/work" --config /work/{{.REPO_NAME}}/.security/credscan-config.toml
       else
-        docker run --rm --volume "{{.REPO_ABS_ROOT_PATH}}:/work" zricethezav/gitleaks:latest detect --no-git --exit-code 1 -v ${redact} --source="/work" --config /work/.security/credscan-config.toml
+        docker run --rm --volume "{{.ORBS_CALLER_ROOT_PATH}}:/work" zricethezav/gitleaks:latest detect --no-git --exit-code 1 -v ${redact} --source="/work" --config /work/{{.REPO_NAME}}/.security/credscan-config.toml
       fi

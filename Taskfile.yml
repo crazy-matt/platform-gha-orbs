@@ -1,0 +1,26 @@
+# https://taskfile.dev
+# A modern replacement of Makefile
+version: '3'
+
+includes:
+  security:
+    taskfile: ./Taskfile.security.yml
+    optional: true
+  linting:
+    taskfile: ./Taskfile.linting.yml
+    optional: true
+
+silent: true
+
+tasks:
+  default:
+    cmds:
+    - echo "📒 {{.TASK}}"
+    - task --list
+
+  debug:
+    desc: Run all debug tasks
+    cmds:
+    - echo -e "\n📒 {{.TASK}}"
+    - task: security:debug
+    - task: linting:debug

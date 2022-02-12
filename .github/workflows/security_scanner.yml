@@ -17,7 +17,6 @@ defaults:
 env:
   GLOBAL_TOOL_VERSIONS: ./platform-gha-orbs/.tool-versions
   TASKFILE_SECURITY: ./platform-gha-orbs/Taskfile.security.yml
-  TASKFILE_LINTER: ./platform-gha-orbs/Taskfile.linter.yml
 
 jobs:
   vulnerability:
