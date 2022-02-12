@@ -13,7 +13,7 @@ on:
 defaults:
   run:
     shell: bash
-    working-directory: ./reusable
+    working-directory: ./platform-gha-orbs
 
 jobs:
   vulnerability:
@@ -22,13 +22,11 @@ jobs:
     steps:
       - name: 'Checkout'
         uses: actions/checkout@v2
-        with:
-          path: ../
       - name: 'Checkout platform-gha-orbs'
         uses: actions/checkout@v2
         with:
           repository: crazy-matt/reusable
-          #path: platform-gha-orbs
+          path: platform-gha-orbs
       - name: 'Cache Grype Database'
         uses: actions/cache@v2
         with:
