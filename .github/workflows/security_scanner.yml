@@ -13,7 +13,11 @@ on:
 defaults:
   run:
     shell: bash
-    working-directory: ./platform-gha-orbs
+
+env:
+  GLOBAL_TOOL_VERSIONS: ./platform-gha-orbs/.tool-versions
+  TASKFILE_SECURITY: ./platform-gha-orbs/Taskfile.security.yml
+  TASKFILE_LINTER: ./platform-gha-orbs/Taskfile.linter.yml
 
 jobs:
   vulnerability:
@@ -25,7 +29,7 @@ jobs:
       - name: 'Checkout platform-gha-orbs'
         uses: actions/checkout@v2
         with:
-          repository: crazy-matt/reusable
+          repository: crazy-matt/platform-gha-orbs
           path: platform-gha-orbs
       - run: |
           ls -lna
@@ -39,7 +43,7 @@ jobs:
       - name: 'Set Job Vars'
         id: vars
         run: |
-          echo "::set-output name=task_version::$(cat platform-gha-orbs/.tool-versions | grep -w task | cut -d ' ' -f2)"
+          echo "::set-output name=task_version::$(cat ${GLOBAL_TOOL_VERSIONS} | grep -w task | cut -d ' ' -f2)"
       - name: 'Install asdf dependencies'
         uses: asdf-vm/actions/setup@v1
       - name: 'Install Task'
@@ -50,7 +54,7 @@ jobs:
         id: scan
         run: |
           set -e
-          task security -- sarif
+          task --taskfile ${TASKFILE_SECURITY} security -- sarif
         env:
           GRYPE_DB_CACHE_DIR: ${{ runner.temp }}/.cache/grype
       - name: 'Upload SARIF reports'
