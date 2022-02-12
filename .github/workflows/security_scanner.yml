@@ -21,6 +21,14 @@ jobs:
     steps:
       - name: 'Checkout'
         uses: actions/checkout@v2
+      - name: 'Checkout'
+        uses: actions/checkout@v2
+        with:
+          repository: crazy-matt/reusable
+      - run: |
+          cd ${{ github.workspace }}
+          ls -lna
+          exit 1
       - name: 'Cache Grype Database'
         uses: actions/cache@v2
         with:
