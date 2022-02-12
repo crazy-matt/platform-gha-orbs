@@ -21,15 +21,14 @@ jobs:
     steps:
       - name: 'Checkout'
         uses: actions/checkout@v2
-      - name: 'Checkout'
+      - name: 'Checkout platform-gha-orbs'
         uses: actions/checkout@v2
         with:
           repository: crazy-matt/reusable
-      - run: |
-          cd ${{ github.workspace }}
-          ls -lna
-          cat .github/workflows/security_scanner.yml
-          exit 1
+          path: platform-gha-orbs
+      - name: 'Bring centralised config'
+        run: |
+          cp platform-gha-orbs/* ./
       - name: 'Cache Grype Database'
         uses: actions/cache@v2
         with:
