@@ -29,6 +29,8 @@ jobs:
       - name: 'Bring centralised config'
         run: |
           cp platform-gha-orbs/* ./
+          ls -lna
+          ls -lna ${{ github.workspace }}
       - name: 'Cache Grype Database'
         uses: actions/cache@v2
         with:
