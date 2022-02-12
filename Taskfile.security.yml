@@ -42,7 +42,6 @@ tasks:
   filesystem:grype:
     desc: Run Grype (Filesystem Vulnerability Scanner)
     cmds:
-    - task: debug:resolve_vars
     - echo -e "\n📒 {{.TASK}}"
     - plugin_name="grype"; asdf plugin add "${plugin_name}" || true; asdf install "${plugin_name}" $(asdf current "${plugin_name}" | tr -s ' ' | cut -d' ' -f2)
     - grype "dir:." --output table --config {{.REPO_ABS_ROOT_PATH}}/.security/grype.yaml

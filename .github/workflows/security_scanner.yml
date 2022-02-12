@@ -25,11 +25,14 @@ jobs:
     steps:
       - name: 'Checkout'
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
       - name: 'Checkout platform-gha-orbs'
         uses: actions/checkout@v2
         with:
           repository: crazy-matt/platform-gha-orbs
           path: platform-gha-orbs
+          fetch-depth: 1
       - name: 'Cache Grype Database'
         uses: actions/cache@v2
         with:
@@ -51,6 +54,8 @@ jobs:
         run: |
           set -e
           task --taskfile ${TASKFILE_SECURITY} all -- sarif
+        env:
+          GRYPE_DB_CACHE_DIR: ${{ runner.temp }}/.cache/grype
         env:
           GRYPE_DB_CACHE_DIR: ${{ runner.temp }}/.cache/grype
       - name: 'Upload SARIF reports'
