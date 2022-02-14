@@ -23,6 +23,7 @@ jobs:
     name: 'Vulnerability'
     runs-on: ubuntu-latest
     permissions: write-all
+      # contents:
     steps:
       - name: 'Checkout'
         uses: actions/checkout@v2
@@ -91,6 +92,7 @@ jobs:
 
       - name: 'Notify if any finding'
         run: |
+          echo ${{ github.actor }}
           curl -su ":${{ env.TOKEN }}" \
             -X POST \
             -H "Accept: application/vnd.github.v3+json" \

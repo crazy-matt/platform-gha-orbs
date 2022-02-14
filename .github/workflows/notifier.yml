@@ -90,7 +90,7 @@ jobs:
         if: github.event.inputs.type == 'alert' || inputs.type == 'alert'
         # uses: rtCamp/action-slack-notify@v2.2.0
         # ^^ to be used as soon as PR https://github.com/rtCamp/action-slack-notify/pull/79 gets approved by the rtCamp maintainer
-        uses: bogaertg/action-slack-notify@95fbd80cf578cd856020cc7729d2ed81f9652064
+        uses: bogaertg/action-slack-notify@95fbd80cf578cd856020cc7729d2ed81f9652064  # scan:ignore
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_ALERTS_WEBHOOK }}
           SLACK_USERNAME: ${{ secrets.SLACK_USERNAME || 'Platform Team' }}
@@ -102,7 +102,7 @@ jobs:
         if: github.event.inputs.type == 'awareness' || inputs.type == 'awareness'
         # uses: rtCamp/action-slack-notify@v2.2.0
         # ^^ to be used as soon as PR https://github.com/rtCamp/action-slack-notify/pull/79 gets approved by the rtCamp maintainer
-        uses: bogaertg/action-slack-notify@95fbd80cf578cd856020cc7729d2ed81f9652064
+        uses: bogaertg/action-slack-notify@95fbd80cf578cd856020cc7729d2ed81f9652064  # scan:ignore
         env:
           SLACK_ICON: 'https://octodex.github.com/images/collabocats.jpg'
           SLACK_WEBHOOK: ${{ secrets.SLACK_AWARENESS_WEBHOOK || secrets.SLACK_BUILD_WEBHOOK }}
@@ -116,7 +116,7 @@ jobs:
         if: github.event.inputs.type == 'build' || inputs.type == 'build'
         # uses: rtCamp/action-slack-notify@v2.2.0
         # ^^ to be used as soon as PR https://github.com/rtCamp/action-slack-notify/pull/79 gets approved by the rtCamp maintainer
-        uses: bogaertg/action-slack-notify@95fbd80cf578cd856020cc7729d2ed81f9652064
+        uses: bogaertg/action-slack-notify@95fbd80cf578cd856020cc7729d2ed81f9652064  # scan:ignore
         env:
           SLACK_ICON: 'https://octodex.github.com/images/constructocat2.jpg'
           SLACK_WEBHOOK: ${{ secrets.SLACK_BUILD_WEBHOOK }}
@@ -130,7 +130,7 @@ jobs:
         if: github.event.inputs.type == 'housekeeping' || inputs.type == 'housekeeping'
         # uses: rtCamp/action-slack-notify@v2.2.0
         # ^^ to be used as soon as PR https://github.com/rtCamp/action-slack-notify/pull/79 gets approved by the rtCamp maintainer
-        uses: bogaertg/action-slack-notify@95fbd80cf578cd856020cc7729d2ed81f9652064
+        uses: bogaertg/action-slack-notify@95fbd80cf578cd856020cc7729d2ed81f9652064  # scan:ignore
         env:
           SLACK_ICON: 'https://octodex.github.com/images/mona-the-rivetertocat.png'
           SLACK_WEBHOOK: ${{ secrets.SLACK_HOUSEKEEPING_WEBHOOK || secrets.SLACK_BUILD_WEBHOOK }}
