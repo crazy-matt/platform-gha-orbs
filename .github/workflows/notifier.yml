@@ -1,8 +1,8 @@
 name: 'Notifier'
 
 on:
-  # repository_dispatch:
-  #   types: [slack-notification]
+  repository_dispatch:
+    types: [slack-notification]
   workflow_call:
     inputs:
       type:
