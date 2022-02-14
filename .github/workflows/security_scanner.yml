@@ -104,5 +104,5 @@ jobs:
                   }
                 }'
         env:
-          #TOKEN: ${{ secrets.CI_GH_PAT_REPO_DISPATCH_API_AUTH }}
-          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TOKEN: ${{ secrets.CI_GH_PAT_REPO_DISPATCH_API_AUTH }}
+          #TOKEN: ${{ secrets.GITHUB_TOKEN }}
