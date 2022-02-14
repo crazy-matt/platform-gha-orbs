@@ -6,8 +6,9 @@ on:
   workflow_call:
     inputs:
       type:
-        required: true
+        required: false
         type: string
+        default: 'build'
       ref:
         required: true
         type: string
