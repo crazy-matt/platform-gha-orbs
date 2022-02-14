@@ -36,8 +36,7 @@ jobs:
         with:
           fetch-depth: 1
       - name: 'Send Slack Security Notification'
-        #if: github.event.client_payload.type == 'alert'
-        if: inputs.type == 'alert'
+        if: github.event.client_payload.type == 'alert' || inputs.type == 'alert'
         # uses: rtCamp/action-slack-notify@v2.2.0
         # ^^ to be used as soon as PR https://github.com/rtCamp/action-slack-notify/pull/79 gets approved by the rtCamp maintainer
         uses: bogaertg/action-slack-notify@95fbd80cf578cd856020cc7729d2ed81f9652064
@@ -45,12 +44,12 @@ jobs:
           SLACK_ICON: 'https://octodex.github.com/images/Sentrytocat_octodex.jpg'
           SLACK_WEBHOOK: ${{ secrets.SLACK_ALERTS_WEBHOOK }}
           SLACK_USERNAME: ${{ secrets.SLACK_USERNAME || 'Platform Team' }}
-          # SLACK_COLOR: ${{ github.event.client_payload.color }}
-          # SLACK_TITLE: ${{ github.event.client_payload.title }}
-          # SLACK_MESSAGE: ${{ github.event.client_payload.message }}
-          SLACK_COLOR: ${{ inputs.color }}
-          SLACK_TITLE: ${{ inputs.title }}
-          SLACK_MESSAGE: ${{ inputs.message }}
+          SLACK_COLOR: ${{ github.event.client_payload.color || inputs.color }}
+          SLACK_TITLE: ${{ github.event.client_payload.title || inputs.title }}
+          SLACK_MESSAGE: ${{ github.event.client_payload.message || inputs.message }}
+          # SLACK_COLOR: ${{ inputs.color }}
+          # SLACK_TITLE: ${{ inputs.title }}
+          # SLACK_MESSAGE: ${{ inputs.message }}
           MSG_MINIMAL: Commit
           SLACK_FOOTER: ''
       - name: 'Send Slack Notification to Raise Awareness'
